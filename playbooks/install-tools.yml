@@ -1,0 +1,14 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  tasks:
+    - name: Install putty
+      apt:
+        update_cache: yes
+        name: putty
+        state: present
+    - name: Install tmux
+      apt:
+        update_cache: yes
+        name: tmux
+        state: present

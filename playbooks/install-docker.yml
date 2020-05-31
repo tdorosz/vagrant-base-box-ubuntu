@@ -1,0 +1,47 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  tasks:
+    - name: Install using apt
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+    - name: Install required system packages
+      apt:
+        name:
+          - 'apt-transport-https'
+          - 'ca-certificates'
+          - 'python3-pip'
+          - 'python3-setuptools'
+          - 'curl'
+          - 'virtualenv'
+          - 'software-properties-common'
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+    - name: Add Docker GPG Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+    - name: Update and install Docker CE
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: yes
+    - name: Create group "docker"
+      group:
+        name: docker
+        state: present
+    - name: Add user "vagrant" to group "docker"
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+
+
